@@ -50,27 +50,8 @@ class OrganizadorPastillas:
        
         
 def main():
-    # hora_antibiotico = OrganizadorPastillas(semanas=3,dosishora=12,hora_incio=21,min_inicio=30)
-    # horario_formitidina = OrganizadorPastillas(semanas=3,dosishora=12,hora_incio = 22,min_inicio=30)
-    # hora_prednisona = OrganizadorPastillas(dias=10,dosishora=12,hora_incio=20,min_inicio=30)
-
     calendario = GoogleCalendarManager()
-
     
-    # for fecha in hora_prednisona.horario:
-    #      fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      fech2 = f"{(fecha + timedelta(minutes=15) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      calendario.create_event("Prednisona Blanca",fech1,fech2,"America/Santiago",["neo.rikr2@gmail.com"])
-
-    # for fecha in hora_antibiotico.horario:
-    #      fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      fech2 = f"{(fecha + timedelta(minutes=15) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      calendario.create_event("Antibiotico Blanca",fech1,fech2,"America/Santiago",["neo.rikr2@gmail.com"])
-
-    # for fecha in horario_formitidina.horario:
-    #      fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      fech2 = f"{(fecha + timedelta(minutes=15) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-    #      calendario.create_event("Farmotidina Blanca",fech1,fech2,"America/Santiago",["neo.rikr2@gmail.com"])
 
     print("********************************")
     print("*                              *")
@@ -111,10 +92,21 @@ def main():
                 print("Valor invalido")
                 break
 
-            hora_antibiotico = OrganizadorPastillas(dias=dias,dosishora=dosis,hora_incio=horas,min_inicio=minutos)
+            hora_pastilla = OrganizadorPastillas(dias=dias,dosishora=dosis,hora_incio=horas,min_inicio=minutos)
 
-            for horas in hora_antibiotico.horario:
+            for horas in hora_pastilla.horario:
                 print(horas)
+            
+            print("¿Quieres agregar la lista a Google Calendar?")
+            ops = input("Y/N: ")
+            if ops == "Y":
+                pastilla = input("Nombre de la pastilla: ")
+                correo = input("Correo Electronico")
+                for fecha in hora_pastilla.horario:
+                    fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
+                    fech2 = f"{(fecha + timedelta(minutes=15) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
+                    calendario.create_event(pastilla,fech1,fech2,"America/Santiago",[correo])
+
         else:
             break
     print("Hasta luego...")
