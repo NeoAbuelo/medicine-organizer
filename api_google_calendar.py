@@ -67,7 +67,13 @@ class GoogleCalendarManager:
             'end': {
                 'dateTime': end_time,
                 'timeZone': timezone,
-            }
+            },
+            'reminders': {
+                         'useDefault': False,
+                         'overrides': [
+                                    {'method': 'popup', 'minutes': 10},
+                                    {'method': 'email', 'minutes': 10},],
+    },
         }
 
         if attendees:
@@ -107,6 +113,6 @@ if __name__ == "__main__":
 
     calendar = GoogleCalendarManager()
 
-    calendar.list_upcoming_events()
+   # calendar.list_upcoming_events()
 
-    calendar.create_event("Pruebas de Calendario","2025-04-14T13:30:00-04:00","2025-04-14T14:00:00-04:00","America/Santiago",["neo.rikr2@gmail.com"])
+    calendar.create_event("Pruebas de Calendario","2025-04-6T13:30:00-04:00","2025-04-6T14:00:00-04:00","America/Santiago",["neo.rikr2@gmail.com"])

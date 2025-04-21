@@ -47,72 +47,107 @@ class OrganizadorPastillas:
             self.fecha_inicio+=timedelta(hours=self.dosishora)
         return fechas
 
-       
-        
+    def imprimir_horario(self):
+        dias_semana = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo"] 
+        for horas in self.horario:
+            dia_semasa = dias_semana[horas.weekday()]
+            print(f"Horairo: {dia_semasa} | {horas.strftime('%H:%M')} | {horas.strftime('%d/%m/%Y')}")
+            
+    def agregar_google_calendar(self):
+        calendario = GoogleCalendarManager()
+        pastilla = input("Nombre de la pastilla: ")
+        correo = input("Correo Electronico: ")
+        for fecha in self.horario:
+            fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
+            fech2 = f"{(fecha + timedelta(minutes=10) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
+            calendario.create_event(pastilla,fech1,fech2,"America/Santiago",[correo])       
+
 def main():
-    calendario = GoogleCalendarManager()
-    
+
+    gato = r"""    /\_____/\
+   /  o   o  \
+  ( ==  ^  == )
+   )         (
+  (           )
+ ( (  )   (  ) )
+(__(__)___(__)__)"""
 
     print("********************************")
     print("*                              *")
     print("*  Organizador de pastillas    *")
     print("*                              *")
     print("********************************")
-    print("\n")
+    print(gato)
     print("\n")
     
 
     while True:
+        
 
-        print("Quieres hacer un horario de tus pastillas?")
-        opcion = input("Y/N: ")
-        if opcion == "Y":
-            print("Cuantas dias debe tomar la dosis?")
+        print("\nEste es un organizador de pastillas dependiendo de la frecuencia de las dosis")
+        print("El medico dio la dosis en semanas o dias?")
+        respuesta = input("S/D: ")
+        print("¿Que dia inicio el tratamiento?")
+        print("Si es hoy, presiona 0")
+        print("Si es otro dia, ingresa el dia de este mes")
+        try:
+            dia_inicio = int(input())
+            if dia_inicio == 0:
+                dia_inicio = None
+        except ValueError:
+            print("Valor invalido")
+            break
+        
+        if respuesta.upper() == "S":
+        #Semanas
+            print("\nCuantas semanas debe tomar la dosis?")
             try:
-                dias = int(input())
-            except:
-                print("Valor invalido")
-                break
-            try:    
+                Semanas = int(input())           
                 print("Hora de inicio: ")
                 horas = int(input())
-            except:
-                print("Valor invalido")
-                break
-            try:
                 print("Minutos de inicio: ")
                 minutos = int(input())
-            except:
-                print("Valor invalida")
-                break
-            try:
                 print("Cada cuantas horas debes tomar la pastilla?")
                 dosis = int(input())
-            except:
+
+                horario_pastilla = OrganizadorPastillas(semanas=Semanas,dosishora=dosis,hora_incio=horas,min_inicio=minutos,dia_inicio=dia_inicio)
+                #Mostrar horario
+                horario_pastilla.imprimir_horario()
+            
+            except ValueError:
+                print("Valor invalido")
+                break
+        #Dias
+        elif respuesta.upper() == "D":   
+            #Settings            
+            print("\nCuantas dias debe tomar la dosis?")
+            try:
+                dias = int(input())           
+                print("Hora de inicio: ")
+                horas = int(input())
+                print("Minutos de inicio: ")
+                minutos = int(input())
+                print("Cada cuantas horas debes tomar la pastilla?")
+                dosis = int(input())
+
+                horario_pastilla = OrganizadorPastillas(dias=dias,dosishora=dosis,hora_incio=horas,min_inicio=minutos,dia_inicio=dia_inicio)
+                #Mostrar horario
+                horario_pastilla.imprimir_horario()
+            except ValueError:
                 print("Valor invalido")
                 break
 
-            hora_pastilla = OrganizadorPastillas(dias=dias,dosishora=dosis,hora_incio=horas,min_inicio=minutos)
-
-            for horas in hora_pastilla.horario:
-                print(horas)
             
-            print("¿Quieres agregar la lista a Google Calendar?")
-            ops = input("Y/N: ")
-            if ops == "Y":
-                pastilla = input("Nombre de la pastilla: ")
-                correo = input("Correo Electronico")
-                for fecha in hora_pastilla.horario:
-                    fech1 = f"{fecha.strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-                    fech2 = f"{(fecha + timedelta(minutes=15) ).strftime('%Y-%m-%dT%H:%M:%S')}-0400"
-                    calendario.create_event(pastilla,fech1,fech2,"America/Santiago",[correo])
-
-        else:
-            break
-    print("Hasta luego...")
-
-    
-    
+            
+        print("¿Quieres agregar la lista a Google Calendar?")
+        ops = input("Y/N: ")
+        if ops == "Y":    
+           horario_pastilla.agregar_google_calendar(horario_pastilla)
+        else:    
+            print("No se agrego a Google Calendar")
+            print(gato)
+            print("Hasta luego ^^")
+            break   
 
 if __name__ == "__main__":
     main()
