@@ -12,7 +12,7 @@ Esta API en Python permite generar un calendario de administración de medicamen
 
 - Python 3.12 o superior
 - Cuenta de Google con acceso a Google Calendar
-- Archivo de credenciales OAuth2 de Google (`credentials.json`)
+- Archivo de credenciales OAuth2 de Google (`token.json`)
 
 ### Librerías necesarias
 
